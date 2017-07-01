@@ -55,19 +55,19 @@ RSpec.describe Vector do
 
   describe 'Vector math' do
 
-    context 'multiplication' do
+    context 'scalar multiplication' do
       before do
         @vector = Vector.new(4, 6)
       end
 
-      it 'multiplies self by a scaler' do
-        @vector.mult!(4)
+      it 'multiplies self by a value' do
+        @vector.scale!(4)
 
         expect(@vector.x).to eq(16)
         expect(@vector.y).to eq(24)
       end
 
-      it 'return multiplied vector of self' do
+      it 'return scaled vector of self' do
         vector = @vector * 2
 
         expect(vector.x).to eq(8)
@@ -82,10 +82,18 @@ RSpec.describe Vector do
 
       it 'adds self to another vector' do
         vector = Vector.new(10, 10)
-        @vector.add!(vector)
+        @vector += vector
 
         expect(@vector.x).to eq(14)
         expect(@vector.y).to eq(16)
+      end
+
+      it 'adds self to another scaled vector' do
+        vector = Vector.new(10, 10)
+        @vector.add_scaled!(vector, 10)
+
+        expect(@vector.x).to eq(104)
+        expect(@vector.y).to eq(106)
       end
 
       it 'returns added vector of self' do
@@ -102,12 +110,20 @@ RSpec.describe Vector do
         @vector = Vector.new(4, 6)
       end
 
-      it 'subtraction self to another vector' do
+      it 'subtracts self from another vector' do
         vector = Vector.new(10, 10)
         @vector.sub!(vector)
 
         expect(@vector.x).to eq(-6)
         expect(@vector.y).to eq(-4)
+      end
+
+      it 'subtracts self from another scaled vector' do
+        vector = Vector.new(10, 10)
+        @vector.sub_scaled!(vector, 10)
+
+        expect(@vector.x).to eq(-96)
+        expect(@vector.y).to eq(-94)
       end
 
       it 'returns subtracted vector of self' do
@@ -116,6 +132,28 @@ RSpec.describe Vector do
 
         expect(vector2.x).to eq(-6)
         expect(vector2.y).to eq(-4)
+      end
+    end
+
+    context 'vector multiplication' do
+      before do
+        @vector = Vector.new(4, 6)
+      end
+
+      it 'multiplies self by another vector' do
+        vector1 = Vector.new(10, 10)
+        @vector.mult!(vector1)
+
+        expect(@vector.x).to eq(40)
+        expect(@vector.y).to eq(60)
+      end
+
+      it 'returns multiplied vector of self' do
+        vector1 = Vector.new(10, 10)
+        vector2 = @vector.mult(vector1)
+
+        expect(vector2.x).to eq(40)
+        expect(vector2.y).to eq(60)
       end
     end
   end
