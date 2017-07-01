@@ -174,6 +174,12 @@ RSpec.describe Vector do
           expect(vector2.y).to eq(60)
         end
       end
+
+      it 'returns dot product of self with another vector' do
+        vector = Vector.new(3, 7)
+        dot = @vector.dot(vector)
+        expect(dot).to eq(54)
+      end
     end
   end
 end

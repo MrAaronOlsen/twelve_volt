@@ -48,6 +48,10 @@ class Vector
     Vector.new(@x*vector.x, @y*vector.y)
   end
 
+  def dot(vector)
+    @x*vector.x + @y*vector.y
+  end
+
   # addition
 
   def + (vector)
