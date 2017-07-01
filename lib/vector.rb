@@ -45,7 +45,7 @@ class Vector
   end
 
   def mult(vector)
-    Vector.new(@x *= vector.x, @y *= vector.y)
+    Vector.new(@x*vector.x, @y*vector.y)
   end
 
   # addition
@@ -55,8 +55,8 @@ class Vector
   end
 
   def add!(vector)
-    @x+vector.x
-    @y+vector.y
+    @x += vector.x
+    @y += vector.y
   end
 
   def add_scaled!(vector, value = 1)
