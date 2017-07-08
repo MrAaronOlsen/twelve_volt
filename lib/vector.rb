@@ -83,4 +83,8 @@ class Vector
     @x -= vector.x * value
     @y -= vector.y * value
   end
+
+  def copy
+    Vector.new(@x, @y)
+  end
 end
