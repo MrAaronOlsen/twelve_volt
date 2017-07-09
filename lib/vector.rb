@@ -1,7 +1,7 @@
 class Vector
   attr_accessor :x, :y
 
-  def initialize(x = 0, y = 0)
+  def initialize(x = 0.0, y = 0.0)
     @x = x
     @y = y
   end
@@ -23,7 +23,7 @@ class Vector
 
   def normalize!
     m = magnitude
-    if m > 0 then @x/=m; @y/=m end
+    if m > 0.0 then @x/=m; @y/=m end
   end
 
 # Vector math
@@ -63,7 +63,7 @@ class Vector
     @y += vector.y
   end
 
-  def add_scaled!(vector, value = 1)
+  def add_scaled!(vector, value = 1.0)
     @x += vector.x * value
     @y += vector.y * value
   end
@@ -79,7 +79,7 @@ class Vector
     @y -= vector.y
   end
 
-  def sub_scaled!(vector, value = 1)
+  def sub_scaled!(vector, value = 1.0)
     @x -= vector.x * value
     @y -= vector.y * value
   end

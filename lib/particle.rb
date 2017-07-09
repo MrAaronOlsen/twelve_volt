@@ -5,7 +5,7 @@ class Particle
   def initialize(pos = Vector.new, vel = Vector.new, acc = Vector.new)
     @position, @velocity, @acceleration = pos, vel, acc
 
-    @mass = 0; set_inverse_mass
+    @mass = 0.0; set_inverse_mass
 
     @damping = 0.999
     @forces = []
@@ -17,7 +17,9 @@ class Particle
   end
 
   def integrate(duration)
+
     unless @mass == 0
+
       @position.add_scaled!(@velocity, duration)
 
       resulting_arc = @acceleration.copy
@@ -40,11 +42,10 @@ class Particle
   private
 
   def set_inverse_mass
-    unless @mass <= 0
+    unless @mass <= 0.0
       @inverse_mass = 1.0/@mass
     else
-      @inverse_mass = 0
+      @inverse_mass = 0.0
     end
   end
-
 end
