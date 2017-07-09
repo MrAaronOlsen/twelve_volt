@@ -43,7 +43,7 @@ class PForceGenerator
       drag_coeff = @k1 * drag_coeff + @k2 * drag_coeff * drag_coeff
 
       force.normalize!
-      force.mult!(-drag_coeff)
+      force.scale!(-drag_coeff)
       particle.add_force(force)
     end
   end

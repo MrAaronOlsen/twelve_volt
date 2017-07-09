@@ -36,5 +36,26 @@ RSpec.describe PForceGenerator do
         assert_vectors_are_equal(particle.forces, new_force)
       end
     end
+
+    describe 'drag' do
+
+      it 'can be drag' do
+        @pfgen.drag(2.0)
+
+        expect(@pfgen.force).to be_a(PForceGenerator::Drag)
+      end
+
+      it 'can add drag force to particle' do
+        particle = Particle.new
+        particle.mass = 10
+        particle.velocity = Vector.new(10, 100)
+
+        @pfgen.drag(2.0)
+        @pfgen.update(particle, 0.001)
+
+        new_force = Vector.new(-4039.950248448356, -40399.50248448356)
+        assert_vectors_are_equal(particle.forces, new_force)
+      end
+    end
   end
 end
