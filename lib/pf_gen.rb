@@ -1,4 +1,4 @@
-class PFGen
+class PForceGenerator
 
   def gravity(force)
     @force = Gravity.new(force)
