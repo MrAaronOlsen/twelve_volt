@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require './lib/vector'
 require './lib/particle'
 require './lib/pf_gen'

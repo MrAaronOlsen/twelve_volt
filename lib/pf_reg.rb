@@ -1,4 +1,5 @@
 class PForceRegistry
+  attr_reader :registry
 
   def initialize
     @registry = []
@@ -9,7 +10,7 @@ class PForceRegistry
   end
 
   def remove(particle, pfgen)
-    @registry.delete_if do |pair|
+    @registry.reject! do |pair|
       pair.particle == particle && pair.pfgen == pfgen
     end
   end
@@ -23,6 +24,8 @@ class PForceRegistry
   end
 
   class Pair
+    attr_reader :particle, :pfgen
+
     def initialize(particle, pfgen)
       @particle = particle
       @pfgen = pfgen
