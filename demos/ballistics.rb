@@ -33,7 +33,7 @@ class Balistic
     @body.velocity = Vector.new(500.0, 0.0)
     @body.acceleration = Vector.new(0.0, 10.0)
     @body.position = Vector.new(0, 600)
-    @body.damping = 0.99
+    @body.damping = 0.89
   end
 end
 
