@@ -2,11 +2,6 @@ require 'spec_helper'
 
 RSpec.describe Particle do
 
-  def assert_vectors_are_equal(vector1, vector2)
-    expect(vector1.x).to eq(vector2.x)
-    expect(vector1.y).to eq(vector2.y)
-  end
-
   describe 'Initialize' do
 
     it 'is a particle' do
@@ -100,7 +95,7 @@ RSpec.describe Particle do
     end
   end
 
-  xdescribe 'forces' do
+  describe 'forces' do
 
     it 'can add forces' do
       particle = Particle.new
@@ -110,9 +105,8 @@ RSpec.describe Particle do
       particle.add_force(force1)
       particle.add_force(force2)
 
-      expect(particle.forces.count).to eq(2)
-      expect(particle.forces[0]).to eq(force1)
-      expect(particle.forces[1]).to eq(force2)
+      new_force = Vector.new(13, 27)
+      assert_vectors_are_equal(particle.forces, new_force)
     end
 
     it 'can clear forces' do
@@ -124,7 +118,8 @@ RSpec.describe Particle do
       particle.add_force(force2)
       particle.clear_forces
 
-      expect(particle.forces.empty?).to be_truthy
+      new_force = Vector.new
+      assert_vectors_are_equal(particle.forces, new_force)
     end
   end
 end

@@ -1,4 +1,5 @@
 class PForceGenerator
+  attr_reader :force
 
   def gravity(force)
     @force = Gravity.new(force)
@@ -22,7 +23,8 @@ class PForceGenerator
     end
 
     def update(particle, duration)
-      particle.add_force(@gravity * particle.mass)
+      force = @gravity * particle.mass
+      particle.add_force(force)
     end
   end
 

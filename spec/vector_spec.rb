@@ -2,13 +2,6 @@ require 'spec_helper'
 
 RSpec.describe Vector do
 
-  def assert_no_mutate(vector)
-    x, y = vector.x, vector.y
-    yield
-    expect(vector.x).to eq(x)
-    expect(vector.y).to eq(y)
-  end
-
   describe 'Initialize' do
 
     it 'is a vector' do
