@@ -18,8 +18,8 @@ class Balistic
   end
 
   def draw
-    Gosu.draw_line(@body.position.x, @body.position.y, 0xff_00ff00,
-					   				 @body.position.x+1, @body.position.y+1, 0xff_00ff00, 1)
+    Gosu.draw_line(@body.position.x, @body.position.y, 0xff_ff0000,
+					   				 @body.position.x+1, @body.position.y+1, 0xff_ff0000, 1)
   end
 
   def invalid?

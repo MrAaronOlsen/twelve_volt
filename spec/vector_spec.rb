@@ -30,6 +30,18 @@ RSpec.describe Vector do
       expect(vector.x).to eq(-4)
       expect(vector.y).to eq(-6)
     end
+
+    it 'can returns an inverse' do
+      vector = Vector.new(4, 6)
+
+      assert_no_mutate(vector) do
+
+        vector_invert = vector.inverse
+
+        expect(vector_invert.x).to eq(-4)
+        expect(vector_invert.y).to eq(-6)
+      end
+    end
   end
 
   describe 'Direction and magnitude' do

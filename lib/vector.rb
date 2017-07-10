@@ -21,6 +21,10 @@ class Vector
     @y = -@y
   end
 
+  def inverse
+    Vector.new(-@x, -@y)
+  end
+  
   def normalize!
     m = magnitude
     if m > 0.0 then @x/=m; @y/=m end
