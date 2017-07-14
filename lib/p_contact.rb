@@ -1,10 +1,9 @@
 class PContact
+  attr_accessor :restitution, :contact_normal, :penetration
+  attr_reader :particles
 
-  def initialize(particle1, particle2, restitution, contact_normal)
-    @particle = { first: particle1, second: particle2 }
-    @restitution = restitution
-    @contact_normal = contact_normal
-    @penetration = penetration
+  def initialize(*particles)
+    @particles = { first: particles[0], second: particles[1] }
   end
 
   def resolve(duration)
@@ -12,13 +11,24 @@ class PContact
     resolve_interpenetration(duration)
   end
 
-  def calculate_seperating_velocity
-    relative_velocity = @particle[:first].velocity.copy
+  def seperating_velocity
+    rel_velocity = @particles[:first].velocity.copy
 
-    if @particle[:second]
-      relative_velocity.sub!(@particle[:second].velocity)
-      relative_velocity * @contact_normal
+    rel_velocity.tap do |rel_v|
+      rel_v.sub!(@particles[:second].velocity) if @particles[:second]
+      rel_v.mult!(contact_normal)
     end
+  end
+
+  class << self
+    def contact_normal(*particles)
+      contact = particles[1].position - particles[0].position
+      contact.normalize!
+    end
+
+    # def calculate_penetration(*particles)
+    #   not sure if I need this yet
+    # end
   end
 
   private
@@ -31,35 +41,35 @@ class PContact
     new_seperating_velocity = seperating_velocity.inverse * restitution
     delta_velocity = new_seperating_velocity - seperating_velocity
 
-    total_i_mass = particle[:first].inverse_mass
-    total_i_mass.add!(particle[:second].inverse_mass) if @particle[:second]
+    total_i_mass = @particles[:first].inverse_mass
+    total_i_mass.add!(@particles[:second].inverse_mass) if @particles[:second]
 
     return if total_inverse_mass <= 0
 
     impulse = delta_velocity / total_i_mass
-    impulse_per_i_mass = @contact_normal * impulse
+    impulse_per_i_mass = contact_normal * impulse
 
-    particle[:first].velocity.add!( impulse_per_i_mass * particle[:first].inverse_mass )
+    @particles[:first].velocity.add!( impulse_per_i_mass * @particles[:first].inverse_mass )
 
-    if particle[:second]
-      particle[:second].velocity.add!( impulse_per_i_mass * -particle[:second].inverse_mass )
+    if @particles[:second]
+      @particles[:second].velocity.add!( impulse_per_i_mass * -@particles[:second].inverse_mass )
     end
   end
 
   def resolve_interpenetration(duration)
-    return if @penetration <= 0
+    return if penetration <= 0
 
-    total_i_mass = particle[:first].inverse_mass
-    total_i_mass.add!(particle[:second].inverse_mass) if particle[:second]
+    total_i_mass = @particles[:first].inverse_mass
+    total_i_mass.add!(@particles[:second].inverse_mass) if @particles[:second]
 
     return if total_i_mass <= 0
 
-    move_per_i_mass = @contact_normal * (@penetration / total_i_mass)
+    move_per_i_mass = contact_normal * (penetration / total_i_mass)
 
-    p_mov_first = move_per_i_mass * particle[:first].inverse_mass
-    p_mov_sec = move_per_i_mass * particle[:second].inverse_mass if particle[:second]
+    p_mov_first = move_per_i_mass * @particles[:first].inverse_mass
+    p_mov_sec = move_per_i_mass * @particles[:second].inverse_mass if @particles[:second]
 
-    particle[:first].position.add!(p_mov_first)
-    particle[:second].position.add!(p_mov_sec) if particle[:second]
+    @particles[:first].position.add!(p_mov_first)
+    @particles[:second].position.add!(p_mov_sec) if particles[:second]
   end
 end

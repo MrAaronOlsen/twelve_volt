@@ -67,6 +67,13 @@ RSpec.describe Vector do
       expect(@vector.x).to be_within(0.0005).of(0.7071)
       expect(@vector.y).to be_within(0.0005).of(0.7071)
     end
+
+    it 'returns a normal of self' do
+      normal = @vector.normal
+
+      expect(normal.x).to eq(-4)
+      expect(normal.y).to eq(4)
+    end
   end
 
   describe 'Math' do

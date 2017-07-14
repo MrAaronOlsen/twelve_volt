@@ -5,6 +5,7 @@ require './lib/vector'
 require './lib/particle'
 require './lib/pf_gen'
 require './lib/pf_reg'
+require './lib/p_contact'
 
 require 'pry'
 
