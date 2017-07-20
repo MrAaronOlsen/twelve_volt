@@ -88,4 +88,29 @@ class Vector
   def copy
     Vector.new(@x, @y)
   end
+
+  # division
+
+  def / (value)
+    Vector.new(@x / value, @y / value) unless value.zero?
+  end
+
+  # comparisons
+
+  def > (args)
+    if args.is_a? Vector
+      @x > args.x && @y > args.y
+    else
+      @x > args && @y > args
+    end
+  end
+
+  def < (args)
+    if args.is_a? Vector
+      @x < args.x && @y < args.y
+    else
+      @x < args && @y < args
+    end
+  end
+
 end

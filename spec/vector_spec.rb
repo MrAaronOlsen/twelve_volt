@@ -45,6 +45,7 @@ RSpec.describe Vector do
   end
 
   describe 'Direction and magnitude' do
+
     before do
       @vector = Vector.new(4, 4)
     end
@@ -177,7 +178,7 @@ RSpec.describe Vector do
         expect(@vector.y).to eq(60)
       end
 
-      it 'returns multiplied vector of self' do
+      it 'returns multiplied vector of self by vector' do
         assert_no_mutate(@vector) do
           vector1 = Vector.new(10, 10)
           vector2 = @vector.mult(vector1)
@@ -191,6 +192,55 @@ RSpec.describe Vector do
         vector = Vector.new(3, 7)
         dot = @vector.dot(vector)
         expect(dot).to eq(54)
+      end
+    end
+
+    context 'vector division' do
+      before do
+        @vector = Vector.new(10, 20)
+      end
+
+      it 'returns divided vector of self by value' do
+        assert_no_mutate(@vector) do
+          vector2 = @vector / 10
+
+          expect(vector2.x).to eq(1)
+          expect(vector2.y).to eq(2)
+        end
+      end
+    end
+
+    context 'vector comparisons' do
+      before do
+        @vector = Vector.new(10, 10)
+      end
+
+      it 'compares vector >' do
+        comparison = Vector.new(11, 11)
+        result = @vector > comparison
+
+        expect(result).to be_falsey
+      end
+
+      it 'compares vector <' do
+        comparison = Vector.new(11, 11)
+        result = @vector < comparison
+
+        expect(result).to be_truthy
+      end
+
+      it 'compares value >' do
+        comparison = 11.0
+        result = @vector > comparison
+
+        expect(result).to be_falsey
+      end
+
+      it 'compares value <' do
+        comparison = 11.0
+        result = @vector < comparison
+
+        expect(result).to be_truthy
       end
     end
   end

@@ -8,10 +8,10 @@ class PContact
 
   def resolve(duration)
     resolve_velocity(duration)
-    resolve_interpenetration(duration)
+    # resolve_interpenetration(duration)
   end
 
-  def seperating_velocity
+  def get_seperating_velocity
     rel_velocity = @particles[:first].velocity.copy
 
     rel_velocity.tap do |rel_v|
@@ -34,20 +34,20 @@ class PContact
   private
 
   def resolve_velocity(duration)
-    seperating_velocity = calculate_seperating_velocity
+    seperating_velocity = get_seperating_velocity
 
-    return if seperating_velocity > 0
+    return if seperating_velocity > 0.0
 
-    new_seperating_velocity = seperating_velocity.inverse * restitution
-    delta_velocity = new_seperating_velocity - seperating_velocity
+    new_sep_velocity = seperating_velocity.inverse * restitution
+    delta_velocity = new_sep_velocity - seperating_velocity
 
     total_i_mass = @particles[:first].inverse_mass
-    total_i_mass.add!(@particles[:second].inverse_mass) if @particles[:second]
+    total_i_mass += @particles[:second].inverse_mass if @particles[:second]
 
-    return if total_inverse_mass <= 0
+    return if total_i_mass <= 0.0
 
     impulse = delta_velocity / total_i_mass
-    impulse_per_i_mass = contact_normal * impulse
+    impulse_per_i_mass = contact_normal.mult(impulse)
 
     @particles[:first].velocity.add!( impulse_per_i_mass * @particles[:first].inverse_mass )
 
