@@ -40,7 +40,6 @@ class PContact
     velocity_buildup.sub!(@particles[:second].acceleration) if @particles[:second]
     buildup_sep_vel = velocity_buildup.mult!(contact_normal).scale!(duration)
 
-
     new_sep_velocity.add!(buildup_sep_vel * restitution) if buildup_sep_vel < 0
     new_sep_velocity = Vector.new if new_sep_velocity < 0
 

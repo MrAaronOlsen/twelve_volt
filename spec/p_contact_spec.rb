@@ -176,5 +176,50 @@ RSpec.describe PContact do
       assert_vectors_are_equal(result_position, @pcon.particles[:first].position)
       assert_vectors_are_equal(result_velocity, @pcon.particles[:first].velocity)
     end
+
+    it 'will not resolve a particle with 0 mass' do
+      @particle1.position = Vector.new(4.0, 4.0)
+      @particle1.velocity = Vector.new(-2.0, -2.0)
+
+      @particle2.position = Vector.new(4.0, 4.0)
+      @particle2.velocity = Vector.new(0.0, 0.0)
+      @particle2.mass = 0
+
+      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+      @pcon.penetration = 0.0 # skips interpenetration
+      @pcon.resolve(1.0)
+
+      result_position = Vector.new(4.0, 4.0)
+      result_velocity = Vector.new(0.0, 0.0)
+
+      assert_vectors_are_equal(result_velocity, @pcon.particles[:second].velocity)
+      assert_vectors_are_equal(result_position, @pcon.particles[:second].position)
+    end
+
+    it 'will skip resolution if both particles have 0 mass' do
+      @particle1.position = Vector.new(4.0, 6.0)
+      @particle1.velocity = Vector.new(0.0, 0.0)
+      @particle1.mass = 0
+
+      @particle2.position = Vector.new(5.0, 7.0)
+      @particle2.velocity = Vector.new(0.0, 0.0)
+      @particle2.mass = 0
+
+      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+      @pcon.penetration = 1.0
+      @pcon.resolve(1.0)
+
+      result_position1 = Vector.new(4.0, 6.0)
+      result_velocity1 = Vector.new(0.0, 0.0)
+
+      result_position2 = Vector.new(5.0, 7.0)
+      result_velocity2 = Vector.new(0.0, 0.0)
+
+      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
+      assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
+
+      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
+      assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)
+    end
   end
 end

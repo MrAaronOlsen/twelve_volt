@@ -51,7 +51,7 @@ RSpec.describe PForceGenerator do
         particle.velocity = Vector.new(10, 100)
 
         @pfgen.drag(2.0)
-        @pfgen.update(particle, 0.001)
+        @pfgen.update(particle, 1.0)
 
         new_force = Vector.new(-4039.950248448356, -40399.50248448356)
         assert_vectors_are_equal(particle.forces, new_force)
