@@ -97,21 +97,35 @@ class Vector
 
   # comparisons
 
-  def > (args)
-    if args.is_a? Vector
-      @x > args.x && @y > args.y
+  def > (arg)
+    if arg.is_a? Vector
+      @x > arg.x && @y > arg.y
     else
-      @x > args || @y > args
-
+      @x > arg || @y > arg
     end
   end
 
-  def < (args)
-    if args.is_a? Vector
-      @x < args.x && @y < args.y
+  def < (arg)
+    if arg.is_a? Vector
+      @x < arg.x && @y < arg.y
     else
-      @x < args || @y < args
+      @x < arg || @y < arg
     end
   end
 
+  def == (vector)
+    @x == vector.x && @y == vector.y
+  end
+
+  def != (vector)
+    @x != vector.x || @y != vector.y
+  end
+
+  def <= (vector)
+    @x <= vector.x && @y <= vector.y
+  end
+
+  def >= (vector)
+    @x >= vector.x && @y >= vector.y
+  end
 end

@@ -197,51 +197,142 @@ RSpec.describe Vector do
 
     context 'vector division' do
       before do
-        @vector = Vector.new(10, 20)
+        @vector = Vector.new(10.0, 20.0)
       end
 
       it 'returns divided vector of self by value' do
         assert_no_mutate(@vector) do
-          vector2 = @vector / 10
+          vector2 = @vector / 10.0
 
-          expect(vector2.x).to eq(1)
-          expect(vector2.y).to eq(2)
+          expect(vector2.x).to eq(1.0)
+          expect(vector2.y).to eq(2.0)
         end
       end
     end
 
     context 'vector comparisons' do
-      before do
-        @vector = Vector.new(8, 10)
+
+      it 'compares vector ==' do
+        @vector = Vector.new(10.0, 20.0)
+        false1 = Vector.new(9.0, 19.0)
+        false2 = Vector.new(10.0, 19.0)
+        false3 = Vector.new(9.0, 20.0)
+        true1 = Vector.new(10.0, 20.0)
+
+        expect(false1 == @vector).to be_falsey
+        expect(false2 == @vector).to be_falsey
+        expect(false3 == @vector).to be_falsey
+        expect(true1 == @vector).to be_truthy
+      end
+
+      it 'compares vector !=' do
+        @vector = Vector.new(10.0, 20.0)
+        false1 = Vector.new(10.0, 20.0)
+        true1 = Vector.new(9.0, 19.0)
+        true2 = Vector.new(10.0, 19.0)
+        true3 = Vector.new(9.0, 20.0)
+
+        expect(false1 != @vector).to be_falsey
+        expect(true1 != @vector).to be_truthy
+        expect(true2 != @vector).to be_truthy
+        expect(true3 != @vector).to be_truthy
       end
 
       it 'compares vector >' do
-        comparison_false = Vector.new(11, 11)
-        comparison_true = Vector.new(7, 9)
+        @vector = Vector.new(10.0, 20.0)
+        false1 = Vector.new(9.0, 19.0)
+        false2 = Vector.new(9.0, 21.0)
+        false3 = Vector.new(10.0, 20.0)
+        true1 = Vector.new(11.0, 21.0)
 
-        expect(@vector > comparison_false).to be_falsey
-        expect(@vector > comparison_true).to be_falsey
+        expect(false1 > @vector).to be_falsey
+        expect(false2 > @vector).to be_falsey
+        expect(false3 > @vector).to be_falsey
+        expect(true1 > @vector).to be_truthy
       end
 
       it 'compares vector <' do
-        comparison = Vector.new(11, 11)
-        result = @vector < comparison
+        @vector = Vector.new(10.0, 20.0)
+        false1 = Vector.new(11.0, 21.0)
+        false2 = Vector.new(11.0, 19.0)
+        false3 = Vector.new(10.0, 20.0)
+        true1 = Vector.new(9.0, 19.0)
 
-        expect(result).to be_truthy
+        expect(false1 < @vector).to be_falsey
+        expect(false2 < @vector).to be_falsey
+        expect(false3 < @vector).to be_falsey
+        expect(true1 < @vector).to be_truthy
+      end
+
+      it 'compares vector <=' do
+        @vector = Vector.new(10.0, 20.0)
+        true1 = Vector.new(10.0, 20.0)
+        true2 = Vector.new(10.0, 19.0)
+        true3 = Vector.new(9.0, 20.0)
+        true4 = Vector.new(9.0, 19.0)
+
+
+        false1 = Vector.new(11.0, 20.0)
+        false2 = Vector.new(10.0, 21.0)
+        false3 = Vector.new(11.0, 21.0)
+
+        expect(true1 <= @vector).to be_truthy
+        expect(true2 <= @vector).to be_truthy
+        expect(true3 <= @vector).to be_truthy
+        expect(true4 <= @vector).to be_truthy
+        expect(false1 <= @vector).to be_falsey
+        expect(false2 <= @vector).to be_falsey
+        expect(false3 <= @vector).to be_falsey
+      end
+
+      it 'compares vector >=' do
+        @vector = Vector.new(10.0, 20.0)
+        true1 = Vector.new(10.0, 20.0)
+        true2 = Vector.new(10.0, 21.0)
+        true3 = Vector.new(11.0, 20.0)
+        true4 = Vector.new(11.0, 21.0)
+
+        false1 = Vector.new(10.0, 19.0)
+        false2 = Vector.new(9.0, 20.0)
+        false3 = Vector.new(9.0, 19.0)
+
+        expect(true1 >= @vector).to be_truthy
+        expect(true2 >= @vector).to be_truthy
+        expect(true3 >= @vector).to be_truthy
+        expect(true4 >= @vector).to be_truthy
+        expect(false1 >= @vector).to be_falsey
+        expect(false2 >= @vector).to be_falsey
+        expect(false3 >= @vector).to be_falsey
       end
 
       it 'compares value >' do
-        comparison = 11.0
-        result = @vector > comparison
+        @vector = Vector.new(10.0, 20.0)
+        false1 = 21.0
+        false2 = 20.0
+        true1 = 10.0
+        true2 = 19.0
+        true3 = 9.0
 
-        expect(result).to be_falsey
+        expect(@vector > false1).to be_falsey
+        expect(@vector > false2).to be_falsey
+        expect(@vector > true1).to be_truthy
+        expect(@vector > true2).to be_truthy
+        expect(@vector > true3).to be_truthy
       end
 
       it 'compares value <' do
-        comparison = 11.0
-        result = @vector < comparison
+        @vector = Vector.new(10.0, 20.0)
+        false1 = 8.0
+        false2 = 10.0
+        true1 = 20.0
+        true2 = 11.0
+        true3 = 21.0
 
-        expect(result).to be_truthy
+        expect(@vector < false1).to be_falsey
+        expect(@vector < false2).to be_falsey
+        expect(@vector < true1).to be_truthy
+        expect(@vector < true2).to be_truthy
+        expect(@vector < true3).to be_truthy
       end
     end
   end

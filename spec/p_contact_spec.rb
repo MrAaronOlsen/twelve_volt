@@ -13,7 +13,7 @@ RSpec.describe PContact do
     @particle2.mass = 10
   end
 
-  xdescribe 'Initialize' do
+  describe 'Initialize' do
 
     it 'is a PContact' do
       expect(PContact.new).to be_a(PContact)
@@ -68,7 +68,7 @@ RSpec.describe PContact do
       @pcon = PContact.new(@particle1, @particle2)
     end
 
-    xdescribe 'Helper calculations' do
+    describe 'Helper calculations' do
 
       it 'can calculate contact normal' do
         contact_normal = PContact.contact_normal(@particle1, @particle2)
@@ -141,7 +141,7 @@ RSpec.describe PContact do
       assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
-    xit 'can resolve interpenetration' do
+    it 'can resolve interpenetration' do
       @pcon.penetration = 1
       @pcon.resolve(1.0)
 
