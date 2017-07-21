@@ -70,8 +70,8 @@ class PContact
 
     move_per_i_mass = contact_normal * (penetration / total_i_mass)
 
-    particle_movement[0] = move_per_i_mass.scale(@particles[:first].inverse_mass)
-    particle_movement[1] = move_per_i_mass.scale(-@particles[:second].inverse_mass) if @particles[:second]
+    particle_movement[0] = move_per_i_mass * @particles[:first].inverse_mass
+    particle_movement[1] = move_per_i_mass * -@particles[:second].inverse_mass if @particles[:second]
 
     @particles[:first].position.add!(particle_movement[0])
     @particles[:second].position.add!(particle_movement[1]) if @particles[:second]
