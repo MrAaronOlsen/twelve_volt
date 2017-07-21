@@ -120,7 +120,7 @@ RSpec.describe PContact do
       assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
-    it 'will not resolve velocity velocity of particles moving apart' do
+    it 'will not resolve velocity of particles moving apart' do
       @particle1.position = Vector.new(4.0, 4.0)
       @particle1.velocity = Vector.new(2.0, 2.0)
 
@@ -155,6 +155,26 @@ RSpec.describe PContact do
 
       assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
       assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)
+    end
+
+    it 'can resolve interpenetration with resting particles' do
+      @particle1.position = Vector.new(4.0, 2.0)
+      @particle1.velocity = Vector.new(0.0, 1.0)
+      @particle1.acceleration = Vector.new(0.0, 1.0)
+
+      @particle2.position = Vector.new(4.0, 4.0)
+      @particle2.mass = 0
+
+      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+
+      @pcon.penetration = 1.0 # hits interpenetration
+      @pcon.resolve(1.0)
+
+      result_position = Vector.new(4.0, 1.0)
+      result_velocity = Vector.new(0.0, 0.0)
+
+      assert_vectors_are_equal(result_position, @pcon.particles[:first].position)
+      assert_vectors_are_equal(result_velocity, @pcon.particles[:first].velocity)
     end
   end
 end
