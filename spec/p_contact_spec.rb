@@ -59,11 +59,11 @@ RSpec.describe PContact do
 
     before do
       @particle1 = Particle.new
-      @particle1.velocity = Vector.new(-2, 2)
-      @particle1.position = Vector.new(6, 2)
+      @particle1.velocity = Vector.new(-2, -2)
+      @particle1.position = Vector.new(5, 5)
       @particle2 = Particle.new
       @particle2.velocity = Vector.new(2, -2)
-      @particle2.position = Vector.new(1, 7)
+      @particle2.position = Vector.new(5, 3)
 
       @pcon = PContact.new(@particle1, @particle2)
     end
@@ -73,7 +73,7 @@ RSpec.describe PContact do
       it 'can calculate contact normal' do
         contact_normal = PContact.contact_normal(@particle1, @particle2)
 
-        result = Vector.new(-0.7071067811865475, 0.7071067811865475)
+        result = Vector.new(0.0, -1.0)
         assert_vectors_are_equal(contact_normal, result)
       end
 
@@ -81,7 +81,7 @@ RSpec.describe PContact do
         @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
         seperating_velocity = @pcon.get_seperating_velocity
 
-        result = Vector.new(2.82842712474619, 2.82842712474619)
+        result = Vector.new(-0.0, -0.0)
         assert_vectors_are_equal(result, seperating_velocity)
       end
 
@@ -91,7 +91,7 @@ RSpec.describe PContact do
         pcon.contact_normal = PContact.contact_normal(anchor, @particle1)
         seperating_velocity = pcon.get_seperating_velocity
 
-        result = Vector.new(-1.414213562373095, -1.414213562373095)
+        result = Vector.new(-0.0, -2.0)
         assert_vectors_are_equal(result, seperating_velocity)
       end
     end
@@ -101,34 +101,34 @@ RSpec.describe PContact do
 
     before do
       @particle1 = Particle.new
-      @particle1.velocity = Vector.new(-2.0, 2.0)
       @particle1.position = Vector.new(5.0, 5.0)
       @particle1.acceleration = Vector.new(1.0, -1.0)
       @particle1.mass = 10.0
 
       @particle2 = Particle.new
-      @particle2.velocity = Vector.new(2.0, 2.0)
-      @particle2.position = Vector.new(3.0, 5.0)
+      @particle2.position = Vector.new(5.0, 3.0)
       @particle1.acceleration = Vector.new(1.0, 1.0)
       @particle2.mass = 10.0
 
       @pcon = PContact.new(@particle1, @particle2)
       @pcon.restitution = 1.0
-      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
-      @pcon.penetration = 0
     end
 
-    xit 'will resolve velocity of particles moving towards each other' do
+    it 'will resolve velocity of particles moving towards each other' do
+      @particle1.velocity = Vector.new(-2.0, -2.0)
+      @particle2.velocity = Vector.new(2.0, -2.0)
+      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+      @pcon.penetration = -0.0
       @pcon.resolve(1.0)
 
-      result_velocity1 = Vector.new(2.0, 2.0)
-      result_velocity2 = Vector.new(-2.0, 2.0)
+      result_velocity1 = Vector.new(-2.0, 2.0)
+      result_velocity2 = Vector.new(2.0, 2.0)
 
       assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
       assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
-    it 'will not resolve velocity velocity of particles moving apart' do
+    xit 'will not resolve velocity velocity of particles moving apart' do
       @particle1.velocity = Vector.new(-2.0, 2.0)
       @particle2.velocity = Vector.new(2.0, -2.0)
       @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
@@ -141,7 +141,7 @@ RSpec.describe PContact do
       assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
-    it 'can resolve interpenetration' do
+    xit 'can resolve interpenetration' do
       @pcon.penetration = 1
       @pcon.resolve(1.0)
 
