@@ -116,16 +116,25 @@ RSpec.describe PContact do
     end
 
     it 'can resolve velocity' do
+      @pcon.penetration = 0
       @pcon.resolve(1.0)
 
-      result_particle1 = Vector.new(-1.5, 1.5)
-      result_particle2 = Vector.new(-1.5, 1.5)
+      result_velocity1 = Vector.new(-1.5, 1.5)
+      result_velocity2 = Vector.new(-1.5, 1.5)
 
-      assert_vectors_are_equal(result_particle1, @pcon.particles[:first].velocity)
-      assert_vectors_are_equal(result_particle2, @pcon.particles[:second].velocity)
+      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
+      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
     it 'can resolve resolve_interpenetration' do
+      @pcon.penetration = 1
+      @pcon.resolve(1.0)
+
+      result_position1 = Vector.new(5.646446609406726, 5.646446609406726)
+      result_position2 = Vector.new(0.6464466094067263, 0.6464466094067263)
+
+      assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
+      assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)
     end
   end
 end

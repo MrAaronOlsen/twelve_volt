@@ -8,7 +8,7 @@ class PContact
 
   def resolve(duration)
     resolve_velocity(duration)
-    # resolve_interpenetration(duration)
+    resolve_interpenetration(duration)
   end
 
   def get_seperating_velocity
@@ -25,10 +25,6 @@ class PContact
       contact = particles[1].position - particles[0].position
       contact.normalize!
     end
-
-    # def calculate_penetration(*particles)
-    #   not sure if I need this yet
-    # end
   end
 
   private
@@ -60,7 +56,7 @@ class PContact
     return if penetration <= 0
 
     total_i_mass = @particles[:first].inverse_mass
-    total_i_mass.add!(@particles[:second].inverse_mass) if @particles[:second]
+    total_i_mass += @particles[:second].inverse_mass if @particles[:second]
 
     return if total_i_mass <= 0
 
