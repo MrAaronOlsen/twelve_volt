@@ -212,14 +212,15 @@ RSpec.describe Vector do
 
     context 'vector comparisons' do
       before do
-        @vector = Vector.new(10, 10)
+        @vector = Vector.new(8, 10)
       end
 
       it 'compares vector >' do
-        comparison = Vector.new(11, 11)
-        result = @vector > comparison
+        comparison_false = Vector.new(11, 11)
+        comparison_true = Vector.new(7, 9)
 
-        expect(result).to be_falsey
+        expect(@vector > comparison_false).to be_falsey
+        expect(@vector > comparison_true).to be_falsey
       end
 
       it 'compares vector <' do

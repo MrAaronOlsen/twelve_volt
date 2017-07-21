@@ -13,7 +13,6 @@ class PContact
 
   def get_seperating_velocity
     rel_velocity = @particles[:first].velocity.copy
-
     rel_velocity.tap do |rel_v|
       rel_v.sub!(@particles[:second].velocity) if @particles[:second]
       rel_v.mult!(contact_normal)
@@ -25,6 +24,7 @@ class PContact
       contact = particles[1].position - particles[0].position
       contact.normalize!
     end
+
   end
 
   private
@@ -33,8 +33,14 @@ class PContact
     seperating_velocity = get_seperating_velocity
 
     return if seperating_velocity > 0.0
-
     new_sep_velocity = seperating_velocity.inverse * restitution
+
+    velocity_buildup = @particles[:first].acceleration.copy
+    velocity_buildup.sub!(@particles[:second].acceleration) if @particles[:second]
+    buildup_sep_vel = velocity_buildup.mult!(contact_normal).scale!(duration)
+
+    new_sep_velocity.add!(restitution * buildup_sep_vel) if buildup_sep_vel < 0
+
     delta_velocity = new_sep_velocity - seperating_velocity
 
     total_i_mass = @particles[:first].inverse_mass

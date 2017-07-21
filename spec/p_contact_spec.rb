@@ -13,7 +13,7 @@ RSpec.describe PContact do
     @particle2.mass = 10
   end
 
-  describe 'Initialize' do
+  xdescribe 'Initialize' do
 
     it 'is a PContact' do
       expect(PContact.new).to be_a(PContact)
@@ -68,7 +68,7 @@ RSpec.describe PContact do
       @pcon = PContact.new(@particle1, @particle2)
     end
 
-    describe 'Helper calculations' do
+    xdescribe 'Helper calculations' do
 
       it 'can calculate contact normal' do
         contact_normal = PContact.contact_normal(@particle1, @particle2)
@@ -76,24 +76,24 @@ RSpec.describe PContact do
         result = Vector.new(-0.7071067811865475, 0.7071067811865475)
         assert_vectors_are_equal(contact_normal, result)
       end
-    end
 
-    it 'can calculate seperating velocity of two particles' do
-      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
-      seperating_velocity = @pcon.get_seperating_velocity
+      it 'can calculate seperating velocity of two particles' do
+        @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+        seperating_velocity = @pcon.get_seperating_velocity
 
-      result = Vector.new(2.82842712474619, 2.82842712474619)
-      assert_vectors_are_equal(result, seperating_velocity)
-    end
+        result = Vector.new(2.82842712474619, 2.82842712474619)
+        assert_vectors_are_equal(result, seperating_velocity)
+      end
 
-    it 'can calculate seperating velocity for one particle' do
-      pcon = PContact.new(@particle1)
-      anchor = @particle2
-      pcon.contact_normal = PContact.contact_normal(anchor, @particle1)
-      seperating_velocity = pcon.get_seperating_velocity
+      it 'can calculate seperating velocity for one particle' do
+        pcon = PContact.new(@particle1)
+        anchor = @particle2
+        pcon.contact_normal = PContact.contact_normal(anchor, @particle1)
+        seperating_velocity = pcon.get_seperating_velocity
 
-      result = Vector.new(-1.414213562373095, -1.414213562373095)
-      assert_vectors_are_equal(result, seperating_velocity)
+        result = Vector.new(-1.414213562373095, -1.414213562373095)
+        assert_vectors_are_equal(result, seperating_velocity)
+      end
     end
   end
 
@@ -101,37 +101,52 @@ RSpec.describe PContact do
 
     before do
       @particle1 = Particle.new
-      @particle1.velocity = Vector.new(-1.0, 1.0)
-      @particle1.position = Vector.new(6.0, 6.0)
+      @particle1.velocity = Vector.new(-2.0, 2.0)
+      @particle1.position = Vector.new(5.0, 5.0)
+      @particle1.acceleration = Vector.new(1.0, -1.0)
       @particle1.mass = 10.0
 
       @particle2 = Particle.new
-      @particle2.velocity = Vector.new(-2.0, 2.0)
-      @particle2.position = Vector.new(1.0, 1.0)
+      @particle2.velocity = Vector.new(2.0, 2.0)
+      @particle2.position = Vector.new(3.0, 5.0)
+      @particle1.acceleration = Vector.new(1.0, 1.0)
       @particle2.mass = 10.0
 
       @pcon = PContact.new(@particle1, @particle2)
       @pcon.restitution = 1.0
       @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+      @pcon.penetration = 0
     end
 
-    it 'can resolve velocity' do
-      @pcon.penetration = 0
+    xit 'will resolve velocity of particles moving towards each other' do
       @pcon.resolve(1.0)
 
-      result_velocity1 = Vector.new(-1.5, 1.5)
-      result_velocity2 = Vector.new(-1.5, 1.5)
+      result_velocity1 = Vector.new(2.0, 2.0)
+      result_velocity2 = Vector.new(-2.0, 2.0)
 
       assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
       assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
     end
 
-    it 'can resolve resolve_interpenetration' do
+    it 'will not resolve velocity velocity of particles moving apart' do
+      @particle1.velocity = Vector.new(-2.0, 2.0)
+      @particle2.velocity = Vector.new(2.0, -2.0)
+      @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
+      @pcon.resolve(1.0)
+
+      result_velocity1 = Vector.new(-2.0, 2.0)
+      result_velocity2 = Vector.new(2.0, -2.0)
+
+      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
+      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
+    end
+
+    xit 'can resolve interpenetration' do
       @pcon.penetration = 1
       @pcon.resolve(1.0)
 
-      result_position1 = Vector.new(5.646446609406726, 5.646446609406726)
-      result_position2 = Vector.new(0.6464466094067263, 0.6464466094067263)
+      result_position1 = Vector.new(4.5, 5.0)
+      result_position2 = Vector.new(2.5, 5.0)
 
       assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
       assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)

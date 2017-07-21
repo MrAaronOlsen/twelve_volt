@@ -101,7 +101,8 @@ class Vector
     if args.is_a? Vector
       @x > args.x && @y > args.y
     else
-      @x > args && @y > args
+      @x > args || @y > args
+
     end
   end
 
@@ -109,7 +110,7 @@ class Vector
     if args.is_a? Vector
       @x < args.x && @y < args.y
     else
-      @x < args && @y < args
+      @x < args || @y < args
     end
   end
 
