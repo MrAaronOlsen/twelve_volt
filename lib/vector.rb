@@ -12,6 +12,7 @@ class Vector
     Math.sqrt(sqrt_magnitude)
   end
 
+
   def sqrt_magnitude
     @x*@x + @y*@y
   end
@@ -43,6 +44,10 @@ class Vector
 
   def scale!(value)
     self.tap { @x *= value; @y *= value }
+  end
+
+  def scale(value)
+    Vector.new(@x * value, @y * value)
   end
 
   def mult!(vector)
