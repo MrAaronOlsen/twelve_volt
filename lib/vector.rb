@@ -29,6 +29,11 @@ class Vector
     self.tap { if m > 0.0 then @x/=m; @y/=m end }
   end
 
+  def unit
+    vector = self.copy
+    vector.normalize!
+  end
+
   def normal
     Vector.new(-@y, @x)
   end

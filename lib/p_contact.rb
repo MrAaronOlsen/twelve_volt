@@ -31,14 +31,14 @@ class PContact
     seperating_velocity = get_seperating_velocity
 
     return if seperating_velocity > 0.0
-    new_sep_velocity = seperating_velocity.inverse * restitution
+    new_sep_velocity = -seperating_velocity * restitution
 
     velocity_buildup = @particles[:first].acceleration.copy
     velocity_buildup.sub!(@particles[:second].acceleration) if @particles[:second]
-    buildup_sep_vel = velocity_buildup.mult!(contact_normal).scale!(duration)
+    buildup_sep_vel = velocity_buildup.dot(contact_normal.scale!(duration))
 
-    new_sep_velocity.add!(buildup_sep_vel * restitution) if buildup_sep_vel < 0
-    new_sep_velocity = Vector.new if new_sep_velocity < 0
+    new_sep_velocity += buildup_sep_vel * restitution if buildup_sep_vel < 0
+    new_sep_velocity = 0 if new_sep_velocity < 0
 
     delta_velocity = new_sep_velocity - seperating_velocity
 
@@ -48,7 +48,7 @@ class PContact
     return if total_i_mass <= 0.0
 
     impulse = delta_velocity / total_i_mass
-    impulse_per_i_mass = contact_normal.mult(impulse)
+    impulse_per_i_mass = contact_normal * impulse
 
     @particles[:first].velocity.add!( impulse_per_i_mass * @particles[:first].inverse_mass )
 

@@ -59,21 +59,22 @@ RSpec.describe PContact do
 
     before do
       @particle1 = Particle.new
-      @particle1.velocity = Vector.new(-2, -2)
-      @particle1.position = Vector.new(5, 5)
+      @particle1.position = Vector.new(4.0, 4.0)
+      @particle1.velocity = Vector.new(-2.0, -2.0)
+
       @particle2 = Particle.new
-      @particle2.velocity = Vector.new(2, -2)
-      @particle2.position = Vector.new(5, 3)
+      @particle2.position = Vector.new(0.0, 4.0)
+      @particle2.velocity = Vector.new(2.0, -2.0)
 
       @pcon = PContact.new(@particle1, @particle2)
     end
 
-    describe 'Helper calculations' do
+    describe '.contact_normal' do
 
       it 'can calculate contact normal' do
         contact_normal = PContact.contact_normal(@particle1, @particle2)
 
-        result = Vector.new(0.0, 1.0)
+        result = Vector.new(1.0, 0.0)
         assert_vectors_are_equal(contact_normal, result)
       end
 
@@ -81,8 +82,7 @@ RSpec.describe PContact do
         @pcon.contact_normal = PContact.contact_normal(@particle1, @particle2)
         seperating_velocity = @pcon.get_seperating_velocity
 
-        result = Vector.new(-0.0, -0.0)
-        assert_vectors_are_equal(result, seperating_velocity)
+        expect(seperating_velocity).to eq(-4.0)
       end
     end
   end
