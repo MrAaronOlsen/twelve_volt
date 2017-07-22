@@ -12,6 +12,7 @@ require './lib/pf_gen'
 require './lib/pf_reg'
 require './lib/p_contact'
 require './lib/p_contact_resolver'
+require './lib/p_link'
 
 require 'pry'
 

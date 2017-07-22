@@ -31,7 +31,7 @@ RSpec.describe Vector do
       expect(vector.y).to eq(-6)
     end
 
-    it 'can returns an inverse' do
+    it 'can return an inverse' do
       vector = Vector.new(4, 6)
 
       assert_no_mutate(vector) do
@@ -67,6 +67,15 @@ RSpec.describe Vector do
 
       expect(@vector.x).to be_within(0.0005).of(0.7071)
       expect(@vector.y).to be_within(0.0005).of(0.7071)
+    end
+
+    it 'returns a noramalized unit of self' do
+      assert_no_mutate(@vector) do
+        unit = @vector.unit
+
+        expect(unit.x).to be_within(0.0005).of(0.7071)
+        expect(unit.y).to be_within(0.0005).of(0.7071)
+      end
     end
 
     it 'returns a normal of self' do
