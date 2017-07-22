@@ -63,7 +63,7 @@ RSpec.describe Particle do
       @particle.mass = 0
       @particle.integrate(@duration)
 
-      assert_vectors_are_equal(@particle.position, Vector.new(10, 20))
+      expect_vector(10, 20, @particle.position)
     end
 
     it 'updates position by velocity' do

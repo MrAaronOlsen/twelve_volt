@@ -74,8 +74,7 @@ RSpec.describe PContact do
       it 'can calculate contact normal' do
         contact_normal = PContact.contact_normal(@particle1, @particle2)
 
-        result = Vector.new(1.0, 0.0)
-        assert_vectors_are_equal(contact_normal, result)
+        expect_vector(1.0, 0.0, contact_normal)
       end
 
       it 'can calculate seperating velocity of two particles' do
@@ -113,11 +112,8 @@ RSpec.describe PContact do
       @pcon.penetration = 0.0 # skips interpenetration
       @pcon.resolve(1.0)
 
-      result_velocity1 = Vector.new(2.0, -2.0)
-      result_velocity2 = Vector.new(-2.0, -2.0)
-
-      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
-      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
+      expect_vector(2.0, -2.0, @pcon.particles[:first].velocity)
+      expect_vector(-2.0, -2.0, @pcon.particles[:second].velocity)
     end
 
     it 'will not resolve velocity of particles moving apart' do
@@ -131,11 +127,8 @@ RSpec.describe PContact do
       @pcon.penetration = 0.0 # skips interpenetration
       @pcon.resolve(1.0)
 
-      result_velocity1 = Vector.new(2.0, 2.0)
-      result_velocity2 = Vector.new(-2.0, -2.0)
-
-      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
-      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
+      expect_vector(2.0, 2.0, @pcon.particles[:first].velocity)
+      expect_vector(-2.0, -2.0, @pcon.particles[:second].velocity)
     end
 
     it 'can resolve interpenetration' do
@@ -150,11 +143,8 @@ RSpec.describe PContact do
       @pcon.penetration = 2.0 # hits interpenetration
       @pcon.resolve(1.0)
 
-      result_position1 = Vector.new(5.0, 2.0)
-      result_position2 = Vector.new(-1.0, 2.0)
-
-      assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
-      assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)
+      expect_vector(5.0, 2.0, @pcon.particles[:first].position)
+      expect_vector(-1.0, 2.0, @pcon.particles[:second].position)
     end
 
     it 'can resolve interpenetration with resting particles' do
@@ -170,11 +160,8 @@ RSpec.describe PContact do
       @pcon.penetration = 1.0 # hits interpenetration
       @pcon.resolve(1.0)
 
-      result_position = Vector.new(4.0, 1.0)
-      result_velocity = Vector.new(0.0, 0.0)
-
-      assert_vectors_are_equal(result_position, @pcon.particles[:first].position)
-      assert_vectors_are_equal(result_velocity, @pcon.particles[:first].velocity)
+      expect_vector(4.0, 1.0, @pcon.particles[:first].position)
+      expect_vector(0.0, 0.0, @pcon.particles[:first].velocity)
     end
 
     it 'will not resolve a particle with 0 mass' do
@@ -189,11 +176,8 @@ RSpec.describe PContact do
       @pcon.penetration = 0.0 # skips interpenetration
       @pcon.resolve(1.0)
 
-      result_position = Vector.new(4.0, 4.0)
-      result_velocity = Vector.new(0.0, 0.0)
-
-      assert_vectors_are_equal(result_velocity, @pcon.particles[:second].velocity)
-      assert_vectors_are_equal(result_position, @pcon.particles[:second].position)
+      expect_vector(4.0, 4.0, @pcon.particles[:second].position)
+      expect_vector(0.0, 0.0, @pcon.particles[:second].velocity)
     end
 
     it 'will skip resolution if both particles have 0 mass' do
@@ -209,17 +193,11 @@ RSpec.describe PContact do
       @pcon.penetration = 1.0
       @pcon.resolve(1.0)
 
-      result_position1 = Vector.new(4.0, 6.0)
-      result_velocity1 = Vector.new(0.0, 0.0)
+      expect_vector(4.0, 6.0, @pcon.particles[:first].position)
+      expect_vector(0.0, 0.0, @pcon.particles[:first].velocity)
 
-      result_position2 = Vector.new(5.0, 7.0)
-      result_velocity2 = Vector.new(0.0, 0.0)
-
-      assert_vectors_are_equal(result_velocity1, @pcon.particles[:first].velocity)
-      assert_vectors_are_equal(result_position1, @pcon.particles[:first].position)
-
-      assert_vectors_are_equal(result_velocity2, @pcon.particles[:second].velocity)
-      assert_vectors_are_equal(result_position2, @pcon.particles[:second].position)
+      expect_vector(5.0, 7.0, @pcon.particles[:second].position)
+      expect_vector(0.0, 0.0, @pcon.particles[:second].velocity)
     end
   end
 end
