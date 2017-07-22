@@ -13,11 +13,9 @@ class PContact
 
   def get_seperating_velocity
     rel_velocity = @particles[:first].velocity.copy
+    rel_velocity.sub!(@particles[:second].velocity) if @particles[:second]
 
-    rel_velocity.tap do |rel_v|
-      rel_v.sub!(@particles[:second].velocity) if @particles[:second]
-      rel_v.mult!(contact_normal)
-    end
+    rel_velocity.dot(contact_normal)
   end
 
   class << self
@@ -25,7 +23,6 @@ class PContact
       contact = particles[0].position - particles[1].position
       contact.normalize!
     end
-
   end
 
   private
