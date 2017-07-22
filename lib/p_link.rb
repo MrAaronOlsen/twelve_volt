@@ -1,50 +1,56 @@
 class PLink
   attr_reader :p1, :p2
 
-  def initialize(p1, p2)
-    @p1 = p1
-    @p2 = p2
-  end
-
   def current_length
-    (p1 - p2).magnitude
+    (p1.position - p2.position).magnitude
   end
 
-  class << self
+  class Cable < PLink
+    attr_accessor :max_length, :restitution
 
-    def p_cable(p1, p2, max_length, restitution)
-      plink = Plink.new(p1, p2)
-
-      length = plink.current_length
-
-      return 0 if length < max_length
-
-      pcon = PContact.new(p1, p2)
-      pcon.contact_normal = PContact.contact_normal(p2, p1)
-      pcon.penetration = length - max_length
-      pcon.restitution = restitution
-
-      return 1
+    def initialize(p1, p2, max_length, restitution)
+      @p1 = p1
+      @p2 = p2
+      @max_length = max_length
+      @restitution = restitution
     end
 
-    def p_rod(p1, p2, rod_length)
-      plink = PLink.new(p1, p2)
+    def add_contact
+      return false if current_length < max_length
 
-      length = plink.current_length
-      return 0 if length == rod_length
-
-      pcon = Pcontact.new(p1, p2)
-      contact_normal = PContact.contact_normal(p2, p1)
-
-      if length > rod_length
-        plink.contact_normal = contact_normal
-        plink.penetration = rod_length - length
-      else
-        plink.contact_normal = contact_normal * -1
-        plink.penetration = length - rod_length
+      pcon = PContact.new(p1, p2)
+      pcon.tap do
+        pcon.contact_normal = PContact.contact_normal(p2, p1)
+        pcon.penetration = current_length - max_length
+        pcon.restitution = restitution
       end
+    end
+  end
 
-      return 1
+  class Rod < PLink
+    attr_accessor :length
+
+    def initialize(p1, p2, length)
+      @p1 = p1
+      @p2 = p2
+      @length = length
+    end
+
+    def add_contact
+      return false if current_length == length
+
+      pcon = PContact.new(p1, p2)
+      pcon.tap do
+        contact_normal = PContact.contact_normal(p2, p1)
+
+        if current_length > length
+          pcon.contact_normal = contact_normal
+          pcon.penetration = length - current_length
+        else
+          pcon.contact_normal = contact_normal * -1
+          pcon.penetration = length - current_length
+        end
+      end
     end
   end
 end
