@@ -5,13 +5,13 @@ class PForceRegistry
     @registry = []
   end
 
-  def add(particle, pfgen)
-    @registry << Pair.new(particle, pfgen)
+  def add(particle, pf_gen)
+    @registry << Pair.new(particle, pf_gen)
   end
 
-  def remove(particle, pfgen)
+  def remove(particle, pf_gen)
     @registry.reject! do |pair|
-      pair.particle == particle && pair.pfgen == pfgen
+      pair.particle == particle && pair.pf_gen == pf_gen
     end
   end
 
@@ -24,15 +24,15 @@ class PForceRegistry
   end
 
   class Pair
-    attr_reader :particle, :pfgen
+    attr_reader :particle, :pf_gen
 
-    def initialize(particle, pfgen)
+    def initialize(particle, pf_gen)
       @particle = particle
-      @pfgen = pfgen
+      @pf_gen = pf_gen
     end
 
     def update(duration)
-      @pfgen.update(@particle, duration)
+      @pf_gen.update(@particle, duration)
     end
   end
 end

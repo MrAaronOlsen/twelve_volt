@@ -3,17 +3,17 @@ require 'spec_helper'
 RSpec.describe PForceRegistry do
 
   before do
-    @pfreg = PForceRegistry.new
+    @pf_reg = PForceRegistry.new
   end
 
-  describe 'Initialize' do
+  describe '.initialize' do
 
-    it 'is a pfreg' do
-      expect(@pfreg).to be_a(PForceRegistry)
+    it 'is a PForceRegistry' do
+      expect(@pf_reg).to be_a(PForceRegistry)
     end
 
     it 'has default attributes' do
-      expect(@pfreg.registry).to eq([])
+      expect(@pf_reg.registry).to eq([])
     end
 
   end
@@ -30,36 +30,36 @@ RSpec.describe PForceRegistry do
 
       it 'has attributes' do
         particle = Particle.new
-        pfgen = PForceGenerator.new
-        pair = PForceRegistry::Pair.new(particle, pfgen)
+        pf_gen = PForceGenerator.new
+        pair = PForceRegistry::Pair.new(particle, pf_gen)
 
         expect(pair.particle).to eq(particle)
-        expect(pair.pfgen).to eq(pfgen)
+        expect(pair.pf_gen).to eq(pf_gen)
       end
     end
 
     describe 'behaviour' do
 
-      it 'one instance of pfgen can be used for multiple pairs' do
+      it 'one instance of pf_gen can be used for multiple pairs' do
         particle1 = Particle.new
         particle2 = Particle.new
-        pfgen = PForceGenerator.new
+        pf_gen = PForceGenerator.new
 
-        pair1 = PForceRegistry::Pair.new(particle1, pfgen)
-        pair2 = PForceRegistry::Pair.new(particle2, pfgen)
+        pair1 = PForceRegistry::Pair.new(particle1, pf_gen)
+        pair2 = PForceRegistry::Pair.new(particle2, pf_gen)
 
         expect(pair1.particle).to eq(particle1)
-        expect(pair1.pfgen).to eq(pfgen)
+        expect(pair1.pf_gen).to eq(pf_gen)
 
         expect(pair2.particle).to eq(particle2)
-        expect(pair2.pfgen).to eq(pfgen)
+        expect(pair2.pf_gen).to eq(pf_gen)
       end
 
-      it 'can update pfgen' do
-        pfgen = PForceGenerator.new.gravity(Vector.new(0, 10))
+      it 'can update pf_gen' do
+        pf_gen = PForceGenerator.new.gravity(Vector.new(0, 10))
         particle = Particle.new
         particle.mass = 10
-        pair = PForceRegistry::Pair.new(particle, pfgen)
+        pair = PForceRegistry::Pair.new(particle, pf_gen)
 
         new_force = Vector.new(0, 100)
 
@@ -74,37 +74,37 @@ RSpec.describe PForceRegistry do
 
     before do
       @particle = Particle.new
-      @pfgen = PForceGenerator.new
+      @pf_gen = PForceGenerator.new
       @registry = PForceRegistry.new
     end
 
     it 'can add pairs to registry' do
-      @registry.add(@particle, @pfgen)
+      @registry.add(@particle, @pf_gen)
 
       expect(@registry.registry.count).to eq(1)
       expect(@registry.registry.first).to be_a(PForceRegistry::Pair)
       expect(@registry.registry.first.particle).to eq(@particle)
-      expect(@registry.registry.first.pfgen).to eq(@pfgen)
+      expect(@registry.registry.first.pf_gen).to eq(@pf_gen)
     end
 
     it 'can remove a pair from registry' do
-      @registry.add(@particle, @pfgen)
+      @registry.add(@particle, @pf_gen)
 
-      @registry.remove(@particle, @pfgen)
+      @registry.remove(@particle, @pf_gen)
       expect(@registry.registry.empty?).to be_truthy
     end
 
     it 'returns nil if it cant find pair to remove' do
       particle = Particle.new
-      @registry.add(@particle, @pfgen)
+      @registry.add(@particle, @pf_gen)
 
-      result = @registry.remove(particle, @pfgen)
+      result = @registry.remove(particle, @pf_gen)
       expect(@registry.registry.empty?).to be_falsey
       expect(result).to be_falsey
     end
 
     it 'can clear the registry' do
-      3.times { @registry.add(@particle, @pfgen) }
+      3.times { @registry.add(@particle, @pf_gen) }
 
       expect(@registry.registry.count).to eq(3)
       @registry.clear
@@ -114,9 +114,9 @@ RSpec.describe PForceRegistry do
 
     it 'can update pairs' do
       @particle.mass = 10
-      @pfgen.gravity(Vector.new(0, 10))
+      @pf_gen.gravity(Vector.new(0, 10))
 
-      @registry.add(@particle, @pfgen)
+      @registry.add(@particle, @pf_gen)
       @registry.update(0.001)
 
       new_force = Vector.new(0, 100)
