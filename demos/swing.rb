@@ -9,18 +9,27 @@ class Swing
     @p_links = []
   end
 
-  def make_rod
-    top = Particle.new
-    top.position = @position
-
+  def make_cable(last)
     bottom = Particle.new
-    bottom.position = @position - Vector.new(0, 100)
-    bottom.velocity = Vector.new(-10, 0)
+    bottom.position = last.position - Vector.new(10, 10)
+    bottom.acceleration = Vector.new(0, 1.0)
     bottom.mass = 10
 
-    @particles << top << bottom
-    p_link = PLink::Rod.new(bottom, top, 200)
-    @p_links << p_link
+    @particles << bottom
+    @p_links << p_link = PLink::Cable.new(last, bottom, 10, 1)
+    bottom
+  end
+
+  def make_chain
+    head = Particle.new(@position)
+    head.mass = 0
+    @particles << head
+
+    last = make_cable(head)
+
+    3.times do
+      last = make_cable(last)
+    end
   end
 
   def draw
@@ -31,7 +40,7 @@ class Swing
   end
 
   def add_force(force)
-    @particles[1].add_force(force)
+    @particles.last.add_force(force)
   end
 end
 
@@ -48,7 +57,7 @@ class Window < Gosu::Window
     @start_time = 0
 
     @swing = Swing.new(Vector.new(600, 600))
-    @swing.make_rod
+    @swing.make_chain
 
     @world = PWorld.new
     @world.p_links = @swing.p_links
@@ -58,11 +67,12 @@ class Window < Gosu::Window
 	def update
 
     @end_time = Gosu::milliseconds
-    delta_time = @end_time - @start_time
+    @delta_time = @end_time - @start_time
 
-    unless delta_time <= 0.0
+    unless @delta_time <= 0.0
       @world.start_frame
-      @world.update(delta_time)
+      @world.update(@delta_time * 0.01)
+
       @start_time = @end_time
     end
   end
@@ -73,8 +83,10 @@ class Window < Gosu::Window
 
 	def button_down(id)
     close if id == Gosu::KbEscape
-    @swing.add_force(Vector.new(-100, 0)) if id == Gosu::KbLeft
-    @swing.add_force(Vector.new(100, 0)) if id == Gosu::KbRight
+    @swing.particles.last.velocity.add!(Vector.new(-100, 0)) if id == Gosu::KbLeft
+    @swing.particles.last.velocity.add!(Vector.new(100, 0)) if id == Gosu::KbRight
+    @swing.particles.last.velocity.add!(Vector.new(0, -100)) if id == Gosu::KbUp
+    @swing.particles.last.velocity.add!(Vector.new(0, 100)) if id == Gosu::KbDown
   end
 end
 
