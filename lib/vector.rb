@@ -1,7 +1,7 @@
 class Vector
   attr_accessor :x, :y
 
-  def initialize(x = 0, y = 0)
+  def initialize(x = 0.0, y = 0.0)
     @x = x
     @y = y
   end
@@ -17,13 +17,25 @@ class Vector
   end
 
   def invert!
-    @x = -@x
-    @y = -@y
+    self.tap { @x = -@x; @y = -@y }
+  end
+
+  def inverse
+    Vector.new(-@x, -@y)
   end
 
   def normalize!
     m = magnitude
-    if m > 0 then @x/=m; @y/=m end
+    self.tap { if m > 0.0 then @x/=m; @y/=m end }
+  end
+
+  def unit
+    vector = self.copy
+    vector.normalize!
+  end
+
+  def normal
+    Vector.new(-@y, @x)
   end
 
 # Vector math
@@ -35,17 +47,19 @@ class Vector
   end
 
   def scale!(value)
-    @x *= value
-    @y *= value
+    self.tap { @x *= value; @y *= value }
   end
 
   def mult!(vector)
-    @x *= vector.x
-    @y *= vector.y
+    self.tap { @x *= vector.x; @y *= vector.y }
   end
 
   def mult(vector)
     Vector.new(@x*vector.x, @y*vector.y)
+  end
+
+  def dot(vector)
+    @x*vector.x + @y*vector.y
   end
 
   # addition
@@ -55,13 +69,11 @@ class Vector
   end
 
   def add!(vector)
-    @x += vector.x
-    @y += vector.y
+    self.tap { @x += vector.x; @y += vector.y }
   end
 
-  def add_scaled!(vector, value = 1)
-    @x += vector.x * value
-    @y += vector.y * value
+  def add_scaled!(vector, value = 1.0)
+    self.tap { @x += vector.x * value; @y += vector.y * value }
   end
 
   # subtraction
@@ -71,12 +83,54 @@ class Vector
   end
 
   def sub!(vector)
-    @x -= vector.x
-    @y -= vector.y
+    self.tap { @x -= vector.x; @y -= vector.y }
   end
 
-  def sub_scaled!(vector, value = 1)
-    @x -= vector.x * value
-    @y -= vector.y * value
+  def sub_scaled!(vector, value = 1.0)
+    self.tap { @x -= vector.x * value; @y -= vector.y * value }
+  end
+
+  def copy
+    Vector.new(@x, @y)
+  end
+
+  # division
+
+  def / (value)
+    Vector.new(@x / value, @y / value) unless value.zero?
+  end
+
+  # comparisons
+
+  def > (arg)
+    if arg.is_a? Vector
+      @x > arg.x && @y > arg.y
+    else
+      @x > arg || @y > arg
+    end
+  end
+
+  def < (arg)
+    if arg.is_a? Vector
+      @x < arg.x && @y < arg.y
+    else
+      @x < arg || @y < arg
+    end
+  end
+
+  def == (vector)
+    @x == vector.x && @y == vector.y
+  end
+
+  def != (vector)
+    @x != vector.x || @y != vector.y
+  end
+
+  def <= (vector)
+    @x <= vector.x && @y <= vector.y
+  end
+
+  def >= (vector)
+    @x >= vector.x && @y >= vector.y
   end
 end

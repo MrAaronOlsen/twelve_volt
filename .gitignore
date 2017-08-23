@@ -1,0 +1,6 @@
+# Simplecov coverage reports
+coverage
+
+# Yard doc files
+doc
+.yarddoc

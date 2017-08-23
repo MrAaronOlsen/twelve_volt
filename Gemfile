@@ -2,5 +2,8 @@ source 'https://rubygems.org'
 
 gem 'gosu'
 
-gem 'rspec'
-gem 'pry'
+group :test do
+  gem 'rspec'
+  gem 'simplecov', :require => false, :group => :test
+  gem 'pry'
+end
