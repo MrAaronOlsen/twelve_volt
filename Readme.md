@@ -19,4 +19,12 @@ Particles collide with one another based on the behaviors described in a constra
 
 This is the basis of the particle system and is essential for implementation of a full rigid body system.
 
-A few demos   
+A few demos are ready that show shooting particles across the screen and how a cable constraint looks. More to come soon!
+
+What's next?
+
+Currently working on particle forces. This is the last major step for this part of the engine.
+
+Many tests fail. This is a product of franticly tracking down a bug when resolving many contacts at once. New tests are being written to track this, which is an entirely different sort of challenge.
+
+Before I move on from Particles a major refactor party will happen. This won't happen until I've completed my Testing party. CI integration as well beginning the Docs are also in the works. Slow and steady...
