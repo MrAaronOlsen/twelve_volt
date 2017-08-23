@@ -18,10 +18,11 @@ class Particle
 
   def integrate(duration)
 
-    unless @mass == 0
+    unless @mass.zero?
       @position.add_scaled!(@velocity, duration)
 
       resulting_arc = @acceleration.copy
+      resulting_arc.add_scaled!(forces, inverse_mass)
       @velocity.add_scaled!(resulting_arc, duration)
 
       @velocity.scale!( @damping**duration )

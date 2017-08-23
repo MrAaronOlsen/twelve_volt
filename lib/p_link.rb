@@ -18,10 +18,9 @@ class PLink
     def add_contact
       return false if current_length < length
 
-      puts current_length
       pcon = PContact.new(p1, p2)
       pcon.tap do
-        pcon.contact_normal = PContact.contact_normal(p2, p1)
+        pcon.contact_normal = (p2.position - p1.position).unit
         pcon.penetration = current_length - length
         pcon.restitution = restitution
       end
@@ -42,7 +41,7 @@ class PLink
       pcon = PContact.new(p1, p2)
 
       pcon.tap do
-        contact_normal = PContact.contact_normal(p2, p1)
+        contact_normal = (p2.position - p1.position).unit
         pcon.restitution = 0
 
         if current_length > length

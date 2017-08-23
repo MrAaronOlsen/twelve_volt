@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'gosu'
-gem 'yard'
 
 group :test do
   gem 'rspec'

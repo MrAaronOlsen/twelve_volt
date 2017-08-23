@@ -7,33 +7,38 @@ class PContactResolver
 
   def resolve_contacts(*contacts, duration)
     contacts.flatten!
-    max_index = contacts.count
+    iterations = (contacts.count * 2)
 
     iterations.times do |i|
-      # max = 0;
 
-      queue = contacts.sort_by { |contact| contact.get_seperating_velocity }
-      contact = queue.first
-      
+      break if contacts.all? { |contact| contact.get_seperating_velocity >= 0 }
+
+      contact = contacts.min_by { |contact| contact.get_seperating_velocity }
       sep_velocity = contact.get_seperating_velocity
 
       if sep_velocity < 0 || contact.penetration > 0
         contact.resolve(duration)
       end
 
-      # contacts.each_with_index do |contact, i|
-      #   if contact
-      #     sep_velocity = contact.get_seperating_velocity
-      #
-      #     if sep_velocity < max && (sep_velocity < 0 || contact.penetration > 0)
-      #       max = sep_velocity
-      #       max_index = i
-      #     end
-      #   end
-      # end
-      #
-      # break unless contacts[max_index]
-      # contacts[max_index].resolve(duration)
+      move = contact.particle_movement
+
+      if move
+        contacts.each do |j_contact|
+          if j_contact.particles[0] == contact.particles[0]
+            contact.penetration -= move[0].dot(j_contact.contact_normal)
+          elsif j_contact.particles[0] == contact.particles[1]
+            contact.penetration -= move[1].dot(j_contact.contact_normal)
+          end
+
+          if j_contact.particles[1]
+            if j_contact.particles[1] == contact.particles[0]
+              contact.penetration -= move[0].dot(j_contact.contact_normal)
+            elsif j_contact.particles[1] == contact.particles[1]
+              contact.penetration -= move[1].dot(j_contact.contact_normal)
+            end
+          end
+        end
+      end
     end
   end
 end
