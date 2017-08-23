@@ -16,10 +16,11 @@ class Swing
 
     link = Particle.new
     link.position = @position + Vector.new(0, 100)
+    link.acceleration = Vector.new(0, 10)
     link.mass = 10
 
     @particles << head << link
-    @p_links << PLink::Cable.new(head, link, 100, 1)
+    @p_links << PLink::Cable.new(head, link, 100, 0.8)
   end
 
   def draw
@@ -35,7 +36,7 @@ class Swing
 
   def make_cable(last)
     bottom = Particle.new
-    bottom.position = last.position + Vector.new(0, 1)
+    bottom.position = last.position + Vector.new(0, 100)
     bottom.mass = 10
 
     @particles << bottom
@@ -50,7 +51,7 @@ class Swing
 
     last = make_cable(head)
 
-    10.times do
+    1.times do
       last = make_cable(last)
     end
   end
@@ -69,7 +70,7 @@ class Window < Gosu::Window
     @start_time = 0
 
     @swing = Swing.new(Vector.new(600, 600))
-    @swing.make_chain
+    @swing.make_link
 
     @world = PWorld.new
     @world.p_links = @swing.p_links
