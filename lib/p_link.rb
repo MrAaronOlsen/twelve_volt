@@ -1,5 +1,6 @@
 class PLink
-  attr_reader :p1, :p2, :parts, :length, :restitution
+  attr_accessor :length, :restitution
+  attr_reader :p1, :p2, :parts
 
   def current_length
     (p1.position - p2.position).magnitude

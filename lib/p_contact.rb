@@ -2,7 +2,7 @@ class PContact
   attr_accessor :restitution, :contact_normal, :penetration, :particle_movement
   attr_reader :particles
 
-  def initialize(p1, p2)
+  def initialize(p1, p2 = nil)
     @particles = [p1, p2]
   end
 
