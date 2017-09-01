@@ -12,7 +12,6 @@ RSpec.describe PContactResolver do
       pcon_resolver = PContactResolver.new
 
       expect(pcon_resolver.iterations).to eq(0)
-      expect(pcon_resolver.iterations_used).to eq(0)
     end
 
     it 'attributes can be assigned' do

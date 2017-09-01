@@ -68,7 +68,7 @@ RSpec.describe PLink::Rod do
       contact = rod.add_contact
 
       expect(contact).to be_a(PContact)
-      expect(contact.penetration).to eq(-1)
+      expect(contact.penetration).to eq(1)
       expect_vector(-1, 0, contact.contact_normal)
     end
 
@@ -83,7 +83,7 @@ RSpec.describe PLink::Rod do
       contact = rod.add_contact
 
       expect(contact).to be_a(PContact)
-      expect(contact.penetration).to eq(1)
+      expect(contact.penetration).to eq(-1)
       expect_vector(1, 0, contact.contact_normal)
     end
   end

@@ -18,7 +18,7 @@ RSpec.describe PLink::Cable do
 
       expect(cable.p1).to eq(p1)
       expect(cable.p2).to eq(p2)
-      expect(cable.max_length).to eq(10)
+      expect(cable.length).to eq(10)
       expect(cable.restitution).to eq(1)
     end
 
@@ -28,10 +28,10 @@ RSpec.describe PLink::Cable do
 
       cable = PLink::Cable.new(p1, p2, 10, 1)
 
-      cable.max_length = (15)
+      cable.length = (15)
       cable.restitution = (0.5)
 
-      expect(cable.max_length).to eq(15)
+      expect(cable.length).to eq(15)
       expect(cable.restitution).to eq(0.5)
     end
 
