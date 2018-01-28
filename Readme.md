@@ -1,3 +1,5 @@
+This is now archived. It was a fair attempt and I could have probably brought it along to the end, but I decided to scrap it and rewrite another just because. This is more or less a working particle physics library with constraints, but no collision detection. I didn't have any understanding of Matrices and so when I started looking into rotating bodies I decided I needed to step back and start again, but with matrices. Volt is that attempt and my current focus.
+
 #### Twelve Volt
 ##### A Ruby based Rigid Body Physics Engine
 
